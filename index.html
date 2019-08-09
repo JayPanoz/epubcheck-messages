@@ -24,12 +24,17 @@
       }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw.css" integrity="sha256-RKWkj+/VPTTBpmJvgbTZhLSjgt7/i5qqwdo6uULEVT4=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw.min.js" integrity="sha256-jdYDxaVe+yYImykcBZ0OfaPixfUjF0J6ET3hcDQoK/M=" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <h1>List of epubcheck messages</h1>
 
+    <div id="app"></div>
+
     <script type="application/javascript">
+      const app = document.querySelector("#app");
+
       const doRows = (prop) => {
         let rows = ``;
         for (let item of prop) {
@@ -46,9 +51,9 @@
       .then( (response) => {
         return response.json();
       })
-      .then( (data ) => {
+      .then( ( data ) => {
         for (let prop in data) {
-          document.body.innerHTML += `
+          app.innerHTML += `
           <h2>${prop}</h2>
 
           <table class="tablesaw tablesaw-row-zebra" data-tablesaw-sortable data-tablesaw-sortable-switch>
@@ -65,17 +70,15 @@
             </table>
           `;
         }
+        Tablesaw.init();
       })
       .catch( (error) => {
         console.error(error);
-        document.body.innerHTML += `
+        app.innerHTML += `
           <p>An error occurred: ${error}</p>
         `;
       });
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw.min.js" integrity="sha256-jdYDxaVe+yYImykcBZ0OfaPixfUjF0J6ET3hcDQoK/M=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw-init.min.js" integrity="sha256-nLWPACIJGFkfi/oJglk4w5bd0/Bl7dwiOQwfHm9hnoY=" crossorigin="anonymous"></script>
   </body>
 
 </html>
