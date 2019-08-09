@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>epubcheck Messages</title>
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+        max-width: 65rem;
+      }
+      h2 {
+        margin: 3rem 0 1.5rem;
+      }
+      table {
+        margin: 1.5rem 0;
+        border-collapse: collapse;
+        border: 1px solid;
+      }
+      th, td {
+        text-align: left;
+        border: 1px solid;
+        padding: 10px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw.css" integrity="sha256-RKWkj+/VPTTBpmJvgbTZhLSjgt7/i5qqwdo6uULEVT4=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw.min.js" integrity="sha256-jdYDxaVe+yYImykcBZ0OfaPixfUjF0J6ET3hcDQoK/M=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesaw/3.1.2/tablesaw-init.min.js" integrity="sha256-nLWPACIJGFkfi/oJglk4w5bd0/Bl7dwiOQwfHm9hnoY=" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <h1>List of epubcheck messages</h1>
+
+    <script type="application/javascript">
+      // refs: 
+      // - https://github.com/w3c/epubcheck/blob/master/src/main/resources/com/adobe/epubcheck/messages/MessageBundle.properties
+      // - https://github.com/w3c/epubcheck/blob/1f6a882720f6319f4bc98241427e9612d78d52a0/src/main/java/com/adobe/epubcheck/messages/DefaultSeverities.java
+      // - https://github.com/w3c/epubcheck/blob/c19b63928e62e2905f9696afb16b71e7fdcff793/src/main/java/com/adobe/epubcheck/messages/MessageDictionary.java#L69:L347 
+
+      const doRows = (prop) => {
+        let rows = ``;
+        for (let item of prop) {
+          rows += `<tr>
+            <td>${item.code}</td>
+            <td>${item.message}</td>
+            <td>${item.severity}</td>
+          </tr>`;
+        }
+        return rows;
+      };
+
+      fetch("epubcheck-messages.json")
+      .then( (response) => {
+        return response.json();
+      })
+      .then( (data ) => {
+        for (let prop in data) {
+          document.body.innerHTML += `
+          <h2>${prop}</h2>
+
+          <table class="tablesaw tablesaw-row-zebra" data-tablesaw-sortable data-tablesaw-sortable-switch>
+            <thead>
+              <tr>
+                <th data-tablesaw-sortable-col>Code</th>
+                <th>Message</th>
+                <th data-tablesaw-sortable-col>Severity</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${doRows(data[prop])}
+            </tbody>
+            </table>
+          `;
+        }
+      })
+      .catch( (error) => {
+        console.error(error);
+        document.body.innerHTML += `
+          <p>An error occurred: ${error}</p>
+        `;
+      });
+    </script>
+  </body>
+
+</html>
