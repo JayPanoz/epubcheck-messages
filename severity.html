@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>epubcheck Messages Sorted by Severity</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+
+  <body>
+    <h1>List of epubcheck messages (sorted by severity)</h1>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Sorted by Type (Home)</a></li>
+        <li><a href="https://github.com/JayPanoz/epubcheck-messages">Github Repository</a></li>
+        <li><a href="epubcheck-messages.json">Raw JSON</a></li>
+      </ul>
+    </nav>
+
+    <main id="app"></main>
+
+    <script type="application/javascript">
+      const app = document.querySelector("#app");
+
+      let severityData = {
+        suppressed: [],
+        info: [],
+        usage: [],
+        warning: [],
+        error: [],
+        fatal: []
+      };
+
+      const doSort = (prop) => {
+        for (let item of prop) {
+          severityData[item.severity].push({
+            code: item.code,
+            message: item.message
+          });
+        }
+      };
+
+      const doList = (severityLevel) => {
+        let list = ``;
+        for (let item of severityLevel) {
+          list += `
+            <dt>${item.code}</dt>
+            <dd>${item.message}</dd>
+          `;
+        }
+        return list;
+      }
+
+      fetch("epubcheck-messages.json")
+      .then( (response) => {
+        return response.json();
+      })
+      .then( ( data ) => {
+        for (let prop in data) {
+          doSort(data[prop]);
+        }
+        for (let prop in severityData) {
+          app.innerHTML += `
+            <h2>${prop}</h2>
+            <dl>
+              ${doList(severityData[prop])}
+            </dl>
+          `;
+        }
+      })
+      .catch( (error) => {
+        console.error(error);
+        app.innerHTML += `
+          <p>An error occurred: ${error}</p>
+        `;
+      });
+    </script>
+  </body>
+
+</html>

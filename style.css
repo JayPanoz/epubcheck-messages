@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+  max-width: 65rem;
+}
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+nav li {
+  display: inline-block;
+  margin: 0 1.25rem 0 0;
+}
+nav li:last-child {
+  margin: 0;
+}
+h2 {
+  margin: 3rem 0 1.5rem;
+}
+table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  border: 1px solid;
+}
+th, td {
+  text-align: left;
+  border: 1px solid;
+  padding: 10px;
+}
+dt {
+  font-weight: bold;
+  color: #666;
+  margin: 1.5rem 0 0 1rem;
+}
